@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101713">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SERGIO RJ">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>SERGIO RJ</title>
+<style>
+:root{color-scheme:dark;--bg:#0b100d;--panel:#141d17;--panel2:#1b2820;--line:#2b3a30;--text:#f1f7f2;--muted:#a5b5a9;--green:#42d17a;--danger:#ff7777}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#18251c 0,var(--bg) 55%);color:var(--text);font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+header{padding:26px 18px 14px;max-width:900px;margin:auto}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(145deg,#4be18a,#16864a);display:grid;place-items:center;color:#06140b;font-weight:900;font-size:18px}.brand h1{margin:0;font-size:23px;letter-spacing:.7px}.brand p{margin:3px 0 0;color:var(--muted);font-size:13px}
+main{max-width:900px;margin:auto;padding:0 14px 40px}.summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:10px 0 18px}.tile,.card{background:linear-gradient(150deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:18px}.tile{padding:13px}.tile small{display:block;color:var(--muted);font-size:12px}.tile strong{display:block;font-size:22px;margin-top:5px;color:var(--green);font-variant-numeric:tabular-nums}
+nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:16px 0}.tab{background:#111a14;border:1px solid var(--line);border-radius:13px;padding:12px 10px;color:var(--muted);font-weight:650;text-align:left;min-height:52px}.tab.active{background:#173522;border-color:#2eaa61;color:#eafff0}.tab span{display:block;font-size:11px;font-weight:500;opacity:.8;margin-top:3px}
+.card{padding:17px;margin:12px 0}.card h2{font-size:19px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin:0 0 15px;line-height:1.45}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.field{display:flex;flex-direction:column;gap:6px;margin:10px 0}.field label{font-size:12px;color:var(--muted)}input{width:100%;border:1px solid #3a4a3e;border-radius:11px;background:#0d1510;color:var(--text);padding:13px;font-size:16px;outline:none}input:focus{border-color:var(--green)}button{cursor:pointer;font:inherit}.primary{border:0;border-radius:11px;padding:13px 15px;background:linear-gradient(135deg,var(--green),#20a85b);color:#06140b;font-weight:800;width:100%;margin-top:8px}.secondary{border:1px solid var(--line);border-radius:10px;padding:8px 11px;background:#18231b;color:var(--text)}.danger{color:var(--danger)}.metric{background:#0d1510;border:1px solid var(--line);border-radius:13px;padding:13px;margin:12px 0}.metric small{display:block;color:var(--muted);font-size:12px}.metric strong{display:block;font-size:24px;margin-top:4px;color:var(--green);font-variant-numeric:tabular-nums}.metric-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.list{margin-top:13px}.entry{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #29362d}.entry:last-child{border-bottom:0}.entry small{display:block;color:var(--muted);font-size:12px;margin-top:3px}.hidden{display:none!important}.hint,.empty{font-size:12px;color:var(--muted);line-height:1.5}.footer{text-align:center;color:#829287;font-size:11px;padding:20px}
+@media(min-width:650px){nav{grid-template-columns:repeat(3,minmax(0,1fr))}.summary{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">SRJ</div><div><h1>SERGIO RJ</h1><p>Control personal de horas y días</p></div></div></header>
+<main>
+<section class="summary">
+ <div class="tile"><small>Horas trabajadas</small><strong id="sumWorked">0 h</strong></div>
+ <div class="tile"><small>Horas de zona</small><strong id="sumZone">0 h</strong></div>
+ <div class="tile"><small>Horas compensatorias</small><strong id="sumComp">0 h</strong></div>
+ <div class="tile"><small>Vacaciones restantes</small><strong id="sumHoliday">0 días</strong></div>
+</section>
+<nav>
+ <button class="tab active" data-tab="worked">⏱ Horas trabajadas<span>Registro de jornada</span></button>
+ <button class="tab" data-tab="zone">📍 Horas de zona<span>Horas × tarifa</span></button>
+ <button class="tab" data-tab="days">➕ Días de horas extras<span>8 h × 1,90</span></button>
+ <button class="tab" data-tab="holidays">🏖 Vacaciones<span>Saldo de días</span></button>
+ <button class="tab" data-tab="used">↘ Horas extras disfrutadas<span>Descontar compensación</span></button>
+ <button class="tab" data-tab="money">€ Horas extras en dinero<span>Tarifa configurable</span></button>
+</nav>
+
+<section id="worked" class="panel"><div class="card"><h2>Horas trabajadas</h2><p class="sub">Registra las horas trabajadas. Este contador es independiente de los demás.</p>
+ <div class="grid"><div class="field"><label>Horas</label><input id="workedH" type="number" min="0" step="0.25" placeholder="Ej. 7.5"></div><div class="field"><label>Descripción (opcional)</label><input id="workedNote" placeholder="Ej. Turno de mañana"></div></div>
+ <button class="primary" onclick="addHours('worked')">Añadir horas</button><div class="metric"><small>Total de horas trabajadas</small><strong id="workedTotal">0 h</strong></div><div id="workedList" class="list"></div></div></section>
+
+<section id="zone" class="panel hidden"><div class="card"><h2>Horas de zona</h2><p class="sub">Suma o resta movimientos y define el precio por hora para calcular el valor.</p>
+ <div class="grid"><div class="field"><label>Horas (negativo para restar)</label><input id="zoneH" type="number" step="0.25" placeholder="Ej. 2 o -1"></div><div class="field"><label>Precio por hora (€)</label><input id="zoneRate" type="number" min="0" step="0.01" placeholder="Ej. 5"></div></div>
+ <div class="field"><label>Descripción (opcional)</label><input id="zoneNote" placeholder="Ej. Zona A"></div><button class="primary" onclick="addHours('zone')">Guardar movimiento</button>
+ <div class="metric-row"><div class="metric"><small>Saldo de zona</small><strong id="zoneTotal">0 h</strong></div><div class="metric"><small>Valor calculado</small><strong id="zoneMoney">0,00 €</strong></div></div><div id="zoneList" class="list"></div></div></section>
+
+<section id="days" class="panel hidden"><div class="card"><h2>Días de horas extras</h2><p class="sub">Solo puedes añadir días. Cada día equivale a 8 horas y cada hora se multiplica por 1,90 horas compensatorias.</p>
+ <div class="field"><label>Días que quieres añadir</label><input id="extraDays" type="number" min="0.5" step="0.5" placeholder="Ej. 1"></div><button class="primary" onclick="addExtraDays()">Añadir días</button>
+ <div class="metric-row"><div class="metric"><small>Días acumulados</small><strong id="daysTotal">0 días</strong></div><div class="metric"><small>Horas originales</small><strong id="daysRawHours">0 h</strong></div></div><div class="metric"><small>Horas compensatorias generadas (× 1,90)</small><strong id="daysCompHours">0 h</strong></div>
+ <p class="hint">El saldo generado pasa automáticamente a «Horas extras disfrutadas».</p><div id="daysList" class="list"></div></div></section>
+
+<section id="holidays" class="panel hidden"><div class="card"><h2>Vacaciones</h2><p class="sub">Establece los días iniciales. Después solo podrás descontar los días disfrutados.</p>
+ <div class="field"><label>Días iniciales disponibles</label><input id="holidayInitial" type="number" min="0" step="0.5" placeholder="Ej. 22"></div><button class="primary" onclick="setHolidayInitial()">Guardar cantidad inicial</button>
+ <div class="field"><label>Días disfrutados que quieres descontar</label><input id="holidayUse" type="number" min="0.5" step="0.5" placeholder="Ej. 1"></div><button class="primary" onclick="useHolidays()">Descontar vacaciones</button>
+ <div class="metric-row"><div class="metric"><small>Días iniciales</small><strong id="holidayStart">0 días</strong></div><div class="metric"><small>Días utilizados</small><strong id="holidayUsed">0 días</strong></div></div><div class="metric"><small>Días restantes</small><strong id="holidayRemaining">0 días</strong></div><div id="holidayList" class="list"></div></div></section>
+
+<section id="used" class="panel hidden"><div class="card"><h2>Horas extras disfrutadas</h2><p class="sub">Descuenta horas compensatorias generadas por tus días de horas extras. Puedes descontar horas sueltas o un día completo de 8 horas.</p>
+ <div class="metric"><small>Saldo disponible para compensar</small><strong id="compAvailable">0 h</strong></div>
+ <div class="grid"><div class="field"><label>Horas que quieres descontar</label><input id="compUseH" type="number" min="0" step="0.25" placeholder="Ej. 4"></div><div class="field"><label>Días completos (8 h cada uno)</label><input id="compUseD" type="number" min="0" step="0.5" placeholder="Ej. 1"></div></div>
+ <button class="primary" onclick="useComp()">Descontar horas</button><p class="hint">El descuento se realiza en horas compensatorias. Un día completo equivale a 8 horas.</p><div id="compList" class="list"></div></div></section>
+
+<section id="money" class="panel hidden"><div class="card"><h2>Horas extras en dinero</h2><p class="sub">Introduce las horas extras y define el precio por hora. Es independiente de las horas compensatorias.</p>
+ <div class="grid"><div class="field"><label>Horas extras</label><input id="moneyH" type="number" min="0" step="0.25" placeholder="Ej. 10"></div><div class="field"><label>Precio por hora (€)</label><input id="moneyRate" type="number" min="0" step="0.01" placeholder="Ej. 12"></div></div>
+ <div class="field"><label>Descripción (opcional)</label><input id="moneyNote" placeholder="Ej. Horas de noviembre"></div><button class="primary" onclick="addMoney()">Añadir registro</button>
+ <div class="metric-row"><div class="metric"><small>Total de horas</small><strong id="moneyTotalH">0 h</strong></div><div class="metric"><small>Importe acumulado</small><strong id="moneyTotalE">0,00 €</strong></div></div><div id="moneyList" class="list"></div></div></section>
+<div class="footer">SERGIO RJ · Los datos se guardan en este dispositivo y navegador.</div>
+</main>
+<script>
+const KEY='sergioRJ_data_v1';
+const empty={worked:[],zone:[],extraDays:[],holidayInitial:0,holidays:[],compUses:[],money:[],zoneRate:0};
+let data;try{data=Object.assign({},empty,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){data={...empty}}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function num(v){return Number(v)||0}
+function fmt(v){return num(v).toLocaleString('es-ES',{maximumFractionDigits:2})}
+function eur(v){return num(v).toLocaleString('es-ES',{style:'currency',currency:'EUR'})}
+function total(a,k='hours'){return a.reduce((s,x)=>s+num(x[k]),0)}
+function workedTotal(){return total(data.worked)}
+function zoneTotal(){return total(data.zone)}
+function daysTotal(){return total(data.extraDays,'days')}
+function rawHours(){return daysTotal()*8}
+function generated(){return rawHours()*1.9}
+function usedComp(){return total(data.compUses)}
+function compBalance(){return generated()-usedComp()}
+function holidayUsed(){return total(data.holidays,'days')}
+function holidayBalance(){return num(data.holidayInitial)-holidayUsed()}
+function moneyHours(){return total(data.money,'hours')}
+function moneySum(){return data.money.reduce((s,x)=>s+num(x.hours)*num(x.rate),0)}
+function row(title,detail,amount,action){return `<div class="entry"><div><b>${title}</b><small>${detail}</small></div><div style="display:flex;align-items:center;gap:8px"><b>${amount}</b><button class="secondary danger" onclick="${action}">×</button></div></div>`}
+function list(a,fn){return a.length?a.map(fn).join(''):'<div class="empty">Todavía no hay movimientos.</div>'}
+function remove(kind,i){if(!confirm('¿Eliminar este movimiento?'))return;data[kind].splice(i,1);save()}
+function addHours(kind){const h=num(document.getElementById(kind+'H').value);if(!h){alert('Introduce una cantidad de horas distinta de cero.');return}const note=document.getElementById(kind+'Note')?.value||'';const item={hours:h,note,date:new Date().toLocaleDateString('es-ES')};if(kind==='zone'){item.rate=num(document.getElementById('zoneRate').value);data.zoneRate=item.rate}data[kind].push(item);document.getElementById(kind+'H').value='';if(document.getElementById(kind+'Note'))document.getElementById(kind+'Note').value='';save()}
+function addExtraDays(){const d=num(document.getElementById('extraDays').value);if(d<=0){alert('Introduce un número de días mayor que cero.');return}data.extraDays.push({days:d,date:new Date().toLocaleDateString('es-ES')});document.getElementById('extraDays').value='';save()}
+function setHolidayInitial(){const v=document.getElementById('holidayInitial').value;if(v===''||num(v)<holidayUsed()){alert('Introduce una cantidad válida, igual o superior a los días ya disfrutados.');return}data.holidayInitial=num(v);save()}
+function useHolidays(){const d=num(document.getElementById('holidayUse').value);if(d<=0){alert('Introduce los días que quieres descontar.');return}if(d>holidayBalance()){alert('No tienes suficientes días de vacaciones disponibles.');return}data.holidays.push({days:d,date:new Date().toLocaleDateString('es-ES')});document.getElementById('holidayUse').value='';save()}
+function useComp(){const h=num(document.getElementById('compUseH').value),d=num(document.getElementById('compUseD').value),v=h+d*8;if(v<=0){alert('Introduce las horas o días que quieres descontar.');return}if(v>compBalance()+0.00001){alert('No tienes suficientes horas compensatorias disponibles.');return}data.compUses.push({hours:v,note:(h?fmt(h)+' h':'')+(h&&d?' + ':'')+(d?fmt(d)+' día(s) completos':'') ,date:new Date().toLocaleDateString('es-ES')});document.getElementById('compUseH').value='';document.getElementById('compUseD').value='';save()}
+function addMoney(){const h=num(document.getElementById('moneyH').value),r=document.getElementById('moneyRate').value;if(h<=0||r===''||num(r)<0){alert('Introduce las horas y un precio por hora válido.');return}data.money.push({hours:h,rate:num(r),note:document.getElementById('moneyNote').value,date:new Date().toLocaleDateString('es-ES')});document.getElementById('moneyH').value='';document.getElementById('moneyNote').value='';save()}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('hidden',x.id!==b.dataset.tab))}));
+function render(){
+ document.getElementById('sumWorked').textContent=fmt(workedTotal())+' h';document.getElementById('sumZone').textContent=fmt(zoneTotal())+' h';document.getElementById('sumComp').textContent=fmt(compBalance())+' h';document.getElementById('sumHoliday').textContent=fmt(holidayBalance())+' días';
+ document.getElementById('workedTotal').textContent=fmt(workedTotal())+' h';document.getElementById('workedList').innerHTML=list(data.worked,(x,i)=>row(x.note||'Registro de horas',x.date,fmt(x.hours)+' h',`remove('worked',${i})`));
+ document.getElementById('zoneTotal').textContent=fmt(zoneTotal())+' h';document.getElementById('zoneMoney').textContent=eur(data.zone.reduce((s,x)=>s+x.hours*x.rate,0));document.getElementById('zoneRate').value=data.zoneRate||'';document.getElementById('zoneList').innerHTML=list(data.zone,(x,i)=>row(x.note||'Movimiento de zona',x.date+' · '+eur(x.rate)+'/h',(x.hours>0?'+':'')+fmt(x.hours)+' h',`remove('zone',${i})`));
+ document.getElementById('daysTotal').textContent=fmt(daysTotal())+' días';document.getElementById('daysRawHours').textContent=fmt(rawHours())+' h';document.getElementById('daysCompHours').textContent=fmt(generated())+' h';document.getElementById('daysList').innerHTML=list(data.extraDays,(x,i)=>row('Días añadidos',x.date,'+'+fmt(x.days)+' días',`remove('extraDays',${i})`));
+ document.getElementById('holidayStart').textContent=fmt(data.holidayInitial)+' días';document.getElementById('holidayUsed').textContent=fmt(holidayUsed())+' días';document.getElementById('holidayRemaining').textContent=fmt(holidayBalance())+' días';document.getElementById('holidayInitial').value=data.holidayInitial||'';document.getElementById('holidayList').innerHTML=list(data.holidays,(x,i)=>row('Vacaciones disfrutadas',x.date,'−'+fmt(x.days)+' días',`remove('holidays',${i})`));
+ document.getElementById('compAvailable').textContent=fmt(compBalance())+' h';document.getElementById('compList').innerHTML=list(data.compUses,(x,i)=>row('Horas compensadas',x.date+(x.note?' · '+x.note:''),'−'+fmt(x.hours)+' h',`remove('compUses',${i})`));
+ document.getElementById('moneyTotalH').textContent=fmt(moneyHours())+' h';document.getElementById('moneyTotalE').textContent=eur(moneySum());document.getElementById('moneyList').innerHTML=list(data.money,(x,i)=>row(x.note||'Horas extras',x.date+' · '+fmt(x.hours)+' h × '+eur(x.rate)+'/h',eur(x.hours*x.rate),`remove('money',${i})`));
+}
+render();
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body></html>
